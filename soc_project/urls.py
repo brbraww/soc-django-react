@@ -16,12 +16,12 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 
-from soc.views import home_view, message_detail_view, message_list_view
+from soc.views import home_view, post_detail_view, post_list_view
 
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', home_view),
-    path('messages/', message_list_view),
-    path('messages/<int:message_id>', message_detail_view),
+    path('posts/', post_list_view),
+    path('posts/<int:post_id>', post_detail_view),
 ]

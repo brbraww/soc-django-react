@@ -1,45 +1,45 @@
-from django.http import HttpResponse, JsonResponse
+from django.http import JsonResponse
 from django.shortcuts import render
 
-from .models import Messages
+from .models import Posts
 
 
 def home_view(request, *args, **kwargs):
     return render(request, 'pages/home.html', context={}, status=200)
 
 
-def message_list_view(request, *args, **kwargs):
+def post_list_view(request, *args, **kwargs):
     """
     REST API VIEW
     :return json data
     """
-    qs = Messages.objects.all()
-    messages_list = [{
+    qs = Posts.objects.all()
+    posts_list = [{
         'id': x.id,
         'content': x.content
     } for x in qs]
     data = {
         'isUser': False,
-        'response': messages_list
+        'response': posts_list
     }
     return JsonResponse(data)
 
 
-def message_detail_view(request, message_id, *args, **kwargs):
+def post_detail_view(request, post_id, *args, **kwargs):
     """
         REST API VIEW
         :return json data
         """
     data = {
-        'id': message_id,
+        'id': post_id,
     }
     status = 200
     try:
-        obj = Messages.objects.get(id=message_id)
+        obj = Posts.objects.get(id=post_id)
         data['content'] = obj.content
-        data['message'] = '1'
+        data['post'] = '1'
     except:
-        data['message'] = '0'
+        data['post'] = '0'
         status = 404
 
     return JsonResponse(data, status=status)
