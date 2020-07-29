@@ -19,6 +19,7 @@ def message_list_view(request, *args, **kwargs):
         'content': x.content
     } for x in qs]
     data = {
+        'isUser': False,
         'response': messages_list
     }
     return JsonResponse(data)

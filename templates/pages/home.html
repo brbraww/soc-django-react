@@ -8,4 +8,20 @@
     <h1>
         Home page, bro
     </h1>
+
+<script>
+    const xhr = new XMLHttpRequest()
+    const method = 'GET'
+    const url = '/messages'
+    const responseType = 'json'
+
+    xhr.responseType = responseType
+    xhr.open(method, url)
+    xhr.onload = function () {
+        const serverResponse = xhr.response
+        var listedItems = xhr.response.response
+        console.log(listedItems)
+    }
+    xhr.send()
+</script>
 {% endblock content %}
