@@ -2,6 +2,7 @@ from django.http import JsonResponse
 from django.shortcuts import render
 from random import randint
 
+from .forms import PostForm
 from .models import Posts
 
 
@@ -45,3 +46,12 @@ def post_detail_view(request, post_id, *args, **kwargs):
         status = 404
 
     return JsonResponse(data, status=status)
+
+
+def post_create_view(request, *args, **kwargs):
+    form = PostForm(request.POST or None)
+    if form.is_valid():
+        obj = form.save(commit=False)
+        obj.save()
+        form = PostForm()
+    return render(request, 'components/forms.html', context={'form': form})
