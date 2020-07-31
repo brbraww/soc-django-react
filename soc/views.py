@@ -1,9 +1,14 @@
 from django.http import JsonResponse
-from django.shortcuts import render
+from django.shortcuts import render, redirect
+from django.utils.http  import is_safe_url
+from django.conf import settings
 from random import randint
 
 from .forms import PostForm
 from .models import Posts
+
+
+ALLOWED_HOSTS = settings.ALLOWED_HOSTS
 
 
 def home_view(request, *args, **kwargs):
@@ -50,8 +55,11 @@ def post_detail_view(request, post_id, *args, **kwargs):
 
 def post_create_view(request, *args, **kwargs):
     form = PostForm(request.POST or None)
+    next_url = request.POST.get('next') or None
     if form.is_valid():
         obj = form.save(commit=False)
         obj.save()
+        if next_url != None and is_safe_url(next_url, ALLOWED_HOSTS):
+            return redirect(next_url)
         form = PostForm()
-    return render(request, 'components/forms.html', context={'form': form})
+    return render(request, 'components/form.html', context={'form': form})
