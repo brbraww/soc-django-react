@@ -2,7 +2,6 @@ from django.http import JsonResponse
 from django.shortcuts import render, redirect
 from django.utils.http  import is_safe_url
 from django.conf import settings
-from random import randint
 
 from .forms import PostForm
 from .models import Posts
@@ -21,11 +20,7 @@ def post_list_view(request, *args, **kwargs):
     :return json data
     """
     qs = Posts.objects.all()
-    posts_list = [{
-        'id': x.id,
-        'content': x.content,
-        'likes': randint(0, 20)
-    } for x in qs]
+    posts_list = [x.serialize() for x in qs]
     data = {
         'isUser': False,
         'response': posts_list
@@ -35,9 +30,9 @@ def post_list_view(request, *args, **kwargs):
 
 def post_detail_view(request, post_id, *args, **kwargs):
     """
-        REST API VIEW
-        :return json data
-        """
+    REST API VIEW
+    :return json data
+    """
     data = {
         'id': post_id,
     }
@@ -60,8 +55,8 @@ def post_create_view(request, *args, **kwargs):
         obj = form.save(commit=False)
         obj.save()
         if request.is_ajax():
-            return JsonResponse({}, status=201) # 201 == created items
-        #if next_url != None and is_safe_url(next_url, ALLOWED_HOSTS):
-        #    return redirect(next_url)
+            return JsonResponse(obj.serialize(), status=201) # 201 == created items
+        if next_url != None and is_safe_url(next_url, ALLOWED_HOSTS):
+            return redirect(next_url)
         form = PostForm()
     return render(request, 'components/form.html', context={'form': form})
