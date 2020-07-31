@@ -5,11 +5,13 @@
 {% endblock head_title %}
 
 {% block content %}
-<h1>
-    Home page, bro
-</h1>
+<div class="row text-center">
+    <div class="col">
+        <h1>Home page, bro</h1>
+    </div>
+</div>
 
-<div id="posts">
+<div class="row" id="posts">
     Loading...
 </div>
 
@@ -19,11 +21,25 @@
     const url = '/posts'
     const responseType = 'json'
 
+    function handleDidLike(post_id, currentCount) {
+        console.log(post_id, currentCount)
+    }
+
+    function LikeBtn(post) {
+        return "<button class='btn btn-primary' onclick=handleDidLike(" + post.id + "," + post.likes + ")>" + post.likes + " Likes</button>"
+    }
+
+    function formatPostElement(post) {
+        var formattedPost = '<div class="col-10 mx-auto py-3 mb-4 post" id="post-' + post.id + '"><p>'
+        + post.content + '</p><div class="btn-group">'+ LikeBtn(post) +'</p></div></div>'
+        return formattedPost
+    }
+
     xhr.responseType = responseType
     xhr.open(method, url)
     xhr.onload = function () {
         const serverResponse = xhr.response
-        var listedItems = xhr.response.response
+        var listedItems = xhr.response.response.reverse()
 
         const postsElement = document.getElementById('posts')
         var finalPostsStr = ''
@@ -31,7 +47,8 @@
         for (i=0; i<listedItems.length; i++) {
             console.log(i)
             console.log(listedItems[i])
-            var currentItem = '<div class="mb-4"><h1>' +listedItems[i].id+  '</h1>' + '<p>' + listedItems[i].content + '</p></div>'
+            var postObj = listedItems[i]
+            var currentItem = formatPostElement(postObj)
             finalPostsStr += currentItem
         }
         postsElement.innerHTML = finalPostsStr

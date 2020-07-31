@@ -1,5 +1,6 @@
 from django.http import JsonResponse
 from django.shortcuts import render
+from random import randint
 
 from .models import Posts
 
@@ -16,7 +17,8 @@ def post_list_view(request, *args, **kwargs):
     qs = Posts.objects.all()
     posts_list = [{
         'id': x.id,
-        'content': x.content
+        'content': x.content,
+        'likes': randint(0, 20)
     } for x in qs]
     data = {
         'isUser': False,
