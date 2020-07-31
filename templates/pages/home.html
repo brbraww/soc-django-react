@@ -5,9 +5,13 @@
 {% endblock head_title %}
 
 {% block content %}
-    <h1>
-        Home page, bro
-    </h1>
+<h1>
+    Home page, bro
+</h1>
+
+<div id="posts">
+    Loading...
+</div>
 
 <script>
     const xhr = new XMLHttpRequest()
@@ -20,7 +24,17 @@
     xhr.onload = function () {
         const serverResponse = xhr.response
         var listedItems = xhr.response.response
-        console.log(listedItems)
+
+        const postsElement = document.getElementById('posts')
+        var finalPostsStr = ''
+        var i;
+        for (i=0; i<listedItems.length; i++) {
+            console.log(i)
+            console.log(listedItems[i])
+            var currentItem = '<div class="mb-4"><h1>' +listedItems[i].id+  '</h1>' + '<p>' + listedItems[i].content + '</p></div>'
+            finalPostsStr += currentItem
+        }
+        postsElement.innerHTML = finalPostsStr
     }
     xhr.send()
 </script>
