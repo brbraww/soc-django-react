@@ -15,6 +15,7 @@
     <div class="col-md-4 mx-auto col-10">
         <form method="POST" action="/posts/create" class="form" id="post-create-form">
             {% csrf_token %}
+            <div class="d-none alert alert-danger" id="post-create-error"></div>
             <input type="hidden" value="/" name="next">
             <textarea required="required" class="form-control" name="content" placeholder="Your post here..."></textarea>
             <button class="btn btn-primary" type="submit">Post</button>
@@ -69,14 +70,44 @@
         xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest')
         xhr.onload = function () {
             if (xhr.status === 201) {
+                handlePostFormError('', false)
                 const newPost = xhr.response
                 const newPostElement = formatPostElement(newPost)
                 const ogHtml = postsContainerElement.innerHTML
                 postsContainerElement.innerHTML = newPostElement + ogHtml
                 myForm.reset()
+            } else if (xhr.status === 400) {
+                const errorJson = xhr.response
+                const contentError = errorJson.content
+                let contentErrorMessage
+                if (contentError) {
+                    contentErrorMessage = contentError[0]
+                    if (contentErrorMessage) {
+                        handlePostFormError(contentErrorMessage, true)
+                    }
+                } else {
+                    alert('error')
+                }
+            } else if (xhr.status === 500) {
+                alert('server error')
             }
         }
+        xhr.onerror = function() {
+            alert('error!')
+        }
         xhr.send(myFormData)
+    }
+
+    function handlePostFormError(msg, display) {
+        var myErrorDiv = document.getElementById('post-create-error')
+        if (display === true) {
+            // show error
+            myErrorDiv.innerText = msg
+            myErrorDiv.setAttribute('class', 'd-block alert alert-danger')
+        } else {
+            // hide error
+            myErrorDiv.setAttribute('class', 'd-none alert alert-danger')
+        }
     }
 
     function LikeBtn(post) {
