@@ -1,13 +1,13 @@
 from django import forms
 
-from .models import Posts
+from .models import Post
 
 
 MAX_POST_LENGTH = 240
 
 class PostForm(forms.ModelForm):
     class Meta:
-        model = Posts
+        model = Post
         fields = ['content']
 
     def clean_content(self):

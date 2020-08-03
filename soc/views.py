@@ -4,7 +4,7 @@ from django.utils.http  import is_safe_url
 from django.conf import settings
 
 from .forms import PostForm
-from .models import Posts
+from .models import Post
 
 
 ALLOWED_HOSTS = settings.ALLOWED_HOSTS
@@ -19,7 +19,7 @@ def post_list_view(request, *args, **kwargs):
     REST API VIEW
     :return json data
     """
-    qs = Posts.objects.all()
+    qs = Post.objects.all()
     posts_list = [x.serialize() for x in qs]
     data = {
         'isUser': False,
@@ -38,7 +38,7 @@ def post_detail_view(request, post_id, *args, **kwargs):
     }
     status = 200
     try:
-        obj = Posts.objects.get(id=post_id)
+        obj = Post.objects.get(id=post_id)
         data['content'] = obj.content
         data['post'] = '1'
     except:
@@ -49,10 +49,16 @@ def post_detail_view(request, post_id, *args, **kwargs):
 
 
 def post_create_view(request, *args, **kwargs):
+    user = request.user
+    if not request.user.is_authenticated:
+        if request.is_ajax():
+            return JsonResponse({}, status=401)
+        return redirect(settings.LOGIN_URL)
     form = PostForm(request.POST or None)
     next_url = request.POST.get('next') or None
     if form.is_valid():
         obj = form.save(commit=False)
+        obj.user = user
         obj.save()
         if request.is_ajax():
             return JsonResponse(obj.serialize(), status=201) # 201 == created items
