@@ -38,6 +38,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
+    'rest_framework',
+
     'soc',
 ]
 
@@ -123,3 +125,5 @@ STATIC_URL = '/static/'
 
 # Login url
 LOGIN_URL = '/login'
+
+MAX_POST_LENGTH = 240
