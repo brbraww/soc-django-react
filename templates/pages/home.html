@@ -88,7 +88,7 @@
                 } else {
                     alert('error')
                 }
-            } else if (xhr.status === 401) {
+            } else if (xhr.status === 403) {
                 alert('not authorized')
                 window.location.href = '/login'
             } else if (xhr.status === 500) {

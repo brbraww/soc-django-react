@@ -127,3 +127,13 @@ STATIC_URL = '/static/'
 LOGIN_URL = '/login'
 
 MAX_POST_LENGTH = 240
+
+REST_FRAMEWORK = {
+    "DEFAULT_AUTHENTICATION_CLASSES": [
+        'rest_framework.authentication.SessionAuthentication'
+    ],
+    "DEFAULT_RENDERER_CLASSES": [
+        'rest_framework.renderers.JSONRenderer',
+        #'rest_framework.renderers.BrowsableAPIRenderer',
+    ]
+}

@@ -2,8 +2,11 @@ from django.http import JsonResponse
 from django.shortcuts import render, redirect
 from django.utils.http  import is_safe_url
 from django.conf import settings
+
 from rest_framework.response import Response
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, permission_classes, authentication_classes
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.authentication import SessionAuthentication
 
 from .forms import PostForm
 from .models import Post
@@ -17,6 +20,8 @@ def home_view(request, *args, **kwargs):
 
 
 @api_view(['POST'])
+#@authentication_classes([SessionAuthentication])
+@permission_classes([IsAuthenticated])
 def post_create_view(request, *args, **kwargs):
     serializer = PostSerializer(data=request.POST or None)
     if serializer.is_valid(raise_exception=True):
