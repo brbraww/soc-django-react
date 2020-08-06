@@ -1,6 +1,6 @@
 from django.http import JsonResponse
 from django.shortcuts import render, redirect
-from django.utils.http  import is_safe_url
+from django.utils.http import is_safe_url
 from django.conf import settings
 
 from rest_framework.response import Response
@@ -10,7 +10,11 @@ from rest_framework.authentication import SessionAuthentication
 
 from .forms import PostForm
 from .models import Post
-from .serializers import PostSerializer, PostActionSerializer
+from .serializers import (
+    PostSerializer,
+    PostActionSerializer,
+    PostCreateSerializer
+)
 
 ALLOWED_HOSTS = settings.ALLOWED_HOSTS
 
@@ -23,7 +27,7 @@ def home_view(request, *args, **kwargs):
 #@authentication_classes([SessionAuthentication])
 @permission_classes([IsAuthenticated])
 def post_create_view(request, *args, **kwargs):
-    serializer = PostSerializer(data=request.POST or None)
+    serializer = PostCreateSerializer(data=request.POST)
     if serializer.is_valid(raise_exception=True):
         serializer.save(user=request.user)
         return Response(serializer.data, status=201)
@@ -73,7 +77,7 @@ def post_action_view(request, *args, **kwargs):
         data = serializer.validated_data
         post_id = data.get('post_id')
         action = data.get('action')
-
+        content = data.get('content')
         qs = Post.objects.filter(id=post_id)
         if not qs.exists():
             return Response({}, status=404)
@@ -85,7 +89,9 @@ def post_action_view(request, *args, **kwargs):
         elif action == 'unlike':
             obj.likes.remove(request.user)
         elif action == 'repost':
-            pass
+            new_post = Post.objects.create(user=request.user, parent=obj, content=content)
+            serializer = PostSerializer(new_post)
+            return Response(serializer.data, status=200)
     return Response({}, status=200)
 
 
