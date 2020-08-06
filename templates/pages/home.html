@@ -13,7 +13,7 @@
 
 <div class="row m-3">
     <div class="col-md-4 mx-auto col-10">
-        <form method="POST" action="/posts/create" class="form" id="post-create-form">
+        <form method="POST" action="api/posts/create" class="form" id="post-create-form">
             {% csrf_token %}
             <div class="d-none alert alert-danger" id="post-create-error"></div>
             <input type="hidden" value="/" name="next">
@@ -47,7 +47,7 @@
     function loadPosts(postElem) {
         const xhr = new XMLHttpRequest()
         const method = 'GET'
-        const url = '/posts'
+        const url = 'api/posts'
         const responseType = 'json'
         xhr.responseType = responseType
         xhr.open(method, url)

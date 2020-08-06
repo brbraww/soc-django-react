@@ -38,7 +38,7 @@ def post_create_view(request, *args, **kwargs):
 def post_list_view(request, *args, **kwargs):
     qs = Post.objects.all()
     serializer = PostSerializer(qs, many=True)
-    return Response(serializer.data)\
+    return Response(serializer.data, status=200)
 
 
 @api_view(['GET'])
@@ -88,10 +88,12 @@ def post_action_view(request, *args, **kwargs):
             return Response(serializer.data, status=200)
         elif action == 'unlike':
             obj.likes.remove(request.user)
+            serializer = PostSerializer(obj)
+            return Response(serializer.data, status=200)
         elif action == 'repost':
             new_post = Post.objects.create(user=request.user, parent=obj, content=content)
             serializer = PostSerializer(new_post)
-            return Response(serializer.data, status=200)
+            return Response(serializer.data, status=201)
     return Response({}, status=200)
 
 
