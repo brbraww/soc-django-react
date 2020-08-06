@@ -10,7 +10,7 @@ from rest_framework.authentication import SessionAuthentication
 
 from .forms import PostForm
 from .models import Post
-from .serializers import PostSerializer
+from .serializers import PostSerializer, PostActionSerializer
 
 ALLOWED_HOSTS = settings.ALLOWED_HOSTS
 
@@ -59,6 +59,34 @@ def post_delete_view(request, post_id, *args, **kwargs):
     obj = qs.first()
     obj.delete()
     return Response({'message': 'post removed'}, status=200)
+
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def post_action_view(request, *args, **kwargs):
+    """
+    id is required
+    Action options are: like, unlike, re-post
+    """
+    serializer = PostActionSerializer(data=request.data)
+    if serializer.is_valid(raise_exception=True):
+        data = serializer.validated_data
+        post_id = data.get('post_id')
+        action = data.get('action')
+
+        qs = Post.objects.filter(id=post_id)
+        if not qs.exists():
+            return Response({}, status=404)
+        obj = qs.first()
+        if action == 'like':
+            obj.likes.add(request.user)
+            serializer = PostSerializer(obj)
+            return Response(serializer.data, status=200)
+        elif action == 'unlike':
+            obj.likes.remove(request.user)
+        elif action == 'repost':
+            pass
+    return Response({}, status=200)
 
 
 def post_list_view_pure_django(request, *args, **kwargs):

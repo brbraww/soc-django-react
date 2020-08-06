@@ -28,6 +28,22 @@
 </div>
 
 <script>
+    function getCookie(name) {
+        var cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            var cookies = document.cookie.split(';');
+            for (var i = 0; i < cookies.length; i++) {
+                var cookie = cookies[i].trim();
+                // Does this cookie string begin with the name we want?
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+
     function loadPosts(postElem) {
         const xhr = new XMLHttpRequest()
         const method = 'GET'
@@ -52,8 +68,25 @@
         xhr.send()
     }
 
-    function handleDidLike(post_id, currentCount) {
-        console.log(post_id, currentCount)
+    function handlePostActionBtn(post_id, currentCount, action) {
+        const postsContainerElement = document.getElementById('posts')
+        const url = 'api/posts/action'
+        const method = 'POST'
+        const data = JSON.stringify({
+            post_id: post_id,
+            action: action
+        })
+        const xhr = new XMLHttpRequest()
+        const csrftoken = getCookie('csrftoken');
+        xhr.open(method, url)
+        xhr.setRequestHeader('Content-Type', 'application/json')
+        xhr.setRequestHeader('HTTP_X_REQUESTED_WITH', 'XMLHttpRequest')
+        xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest')
+        xhr.setRequestHeader('X-CSRFToken', csrftoken)
+        xhr.onload = function() {
+            loadPosts(postsContainerElement)
+        }
+        xhr.send(data)
     }
 
     function handlePostCreateFormDidSubmit(event) {
@@ -114,12 +147,24 @@
     }
 
     function LikeBtn(post) {
-        return "<button class='btn btn-primary' onclick=handleDidLike(" + post.id + "," + post.likes + ")>" + post.likes + " Likes</button>"
+        return "<button class='btn btn-primary' onclick=handlePostActionBtn(" + post.id + "," + post.likes + ",'like')>" + post.likes + " Like</button>"
+    }
+
+    function UnLikeBtn(post) {
+        return "<button class='btn btn-outline-danger' onclick=handlePostActionBtn(" + post.id + "," + post.likes + ",'unlike')>Unlike</button>"
+    }
+
+    function RePostBtn(post) {
+        return "<button class='btn btn-outline-success' onclick=handlePostActionBtn(" + post.id + "," + post.likes + ",'repost')>Share</button>"
     }
 
     function formatPostElement(post) {
         var formattedPost = '<div class="col-10 mx-auto py-3 mb-4 post" id="post-' + post.id + '"><p>'
-        + post.content + '</p><div class="btn-group">'+ LikeBtn(post) +'</p></div></div>'
+        + post.content + '</p><div class="btn-group">'+
+            LikeBtn(post) +
+            UnLikeBtn(post) +
+            RePostBtn(post) +
+        '</p></div></div>'
         return formattedPost
     }
 

@@ -16,7 +16,14 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 
-from soc.views import home_view, post_detail_view, post_list_view, post_create_view, post_delete_view
+from soc.views import (
+    home_view,
+    post_detail_view,
+    post_list_view,
+    post_create_view,
+    post_delete_view,
+    post_action_view
+)
 
 
 urlpatterns = [
@@ -26,4 +33,5 @@ urlpatterns = [
     path('posts/create', post_create_view, name='post_create'),
     path('posts/<int:post_id>', post_detail_view),
     path('api/posts/<int:post_id>/delete', post_delete_view),
+    path('api/posts/action', post_action_view)
 ]

@@ -127,6 +127,7 @@ STATIC_URL = '/static/'
 LOGIN_URL = '/login'
 
 MAX_POST_LENGTH = 240
+POST_ACTION_OPTIONS = ['like', 'unlike', 'repost']
 
 DEFAULT_RENDERER_CLASSES = [
         'rest_framework.renderers.JSONRenderer',
