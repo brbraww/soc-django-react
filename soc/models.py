@@ -24,7 +24,7 @@ class Post(models.Model):
         ordering = ['-id']
 
     def __str__(self):
-        return self.content
+        return str(self.content)
 
     @property
     def is_repost(self):
