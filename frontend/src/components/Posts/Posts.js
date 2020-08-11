@@ -3,7 +3,25 @@ import Post from "./Post/Post";
 import {loadPosts} from "../../api/posts_api";
 
 
-function Posts(props) {
+export const PostsComponent = (props) => {
+    const textAreaRef = React.createRef()
+    const handleSubmit = (event) => {
+        event.preventDefault()
+        const newVal = textAreaRef.current.value
+        textAreaRef.current.value = ''
+        console.log(newVal)
+    }
+    return <div className={props.className}>
+        <div className="col-12 mb-3">
+            <form onSubmit={handleSubmit} action="">
+                <textarea ref={textAreaRef} required={true} className='form-control' name="post" id="" cols="30" rows="10"/>
+                <button type='submit' className='btn btn-primary'>Post</button>
+            </form>
+        </div>
+    </div>
+}
+
+const Posts = (props) => {
     const [posts, setPosts] = useState([{'content': '123'}])
 
     useEffect(() => {

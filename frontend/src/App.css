@@ -1,5 +1,15 @@
 .App {
   text-align: center;
+  display: grid;
+  grid-template-areas:
+          "header header header"
+          "nav content sidebar"
+          "footer footer footer";
+  grid-template-rows: 60px 1fr 60px;
+  grid-template-columns: 20% 1fr 15%;
+  grid-gap: 10px;
+  height: 100vh;
+  margin: 0;
 }
 
 .App-logo {
@@ -35,4 +45,23 @@
   to {
     transform: rotate(360deg);
   }
+}
+
+#pageHeader {
+  grid-area: header;
+}
+#pageFooter {
+  grid-area: footer;
+  background-color: #bf7c8e;
+}
+#mainContent {
+  grid-area: content;
+}
+#mainNav {
+  grid-area: nav;
+  background-color: #4fb3a9;
+}
+#sidebar {
+  grid-area: sidebar;
+  background-color: #79b5e0;
 }

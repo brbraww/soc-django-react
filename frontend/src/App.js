@@ -1,16 +1,25 @@
 import React from 'react';
 import './App.css';
-import Posts from "./components/Posts/Posts";
+import Posts, {PostsComponent} from "./components/Posts/Posts";
 import Header from "./components/Header/Header";
 
 
 
-function App() {
+const App = () => {
   return (
-    <div className="App">
-        <Header />
-        <Posts />
-    </div>
+      <div className='App'>
+          <header id="pageHeader">
+              <Header />
+          </header>
+          <div id="mainContent">
+              <PostsComponent />
+              <Posts />
+          </div>
+          <nav id="mainNav">Nav</nav>
+          <div id="sidebar">Sidebar</div>
+          <footer id="pageFooter">Footer</footer>
+      </div>
+
   );
 }
 
