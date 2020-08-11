@@ -1,6 +1,6 @@
 import React from 'react';
 import './App.css';
-import Posts, {PostsComponent} from "./components/Posts/Posts";
+import {PostsComponent} from "./components/Posts/Posts";
 import Header from "./components/Header/Header";
 
 
@@ -11,9 +11,8 @@ const App = () => {
           <header id="pageHeader">
               <Header />
           </header>
-          <div id="mainContent">
+          <div id="mainContent" className='container'>
               <PostsComponent />
-              <Posts />
           </div>
           <nav id="mainNav">Nav</nav>
           <div id="sidebar">Sidebar</div>

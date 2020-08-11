@@ -5,29 +5,46 @@ import {loadPosts} from "../../api/posts_api";
 
 export const PostsComponent = (props) => {
     const textAreaRef = React.createRef()
+    const [newPosts, setNewPosts] = useState([])
     const handleSubmit = (event) => {
         event.preventDefault()
         const newVal = textAreaRef.current.value
+        let tempNewPosts = [...newPosts]
+
+        tempNewPosts.unshift({
+            content: newVal,
+            likes: 0,
+            id: 123123
+        })
+        setNewPosts(tempNewPosts)
         textAreaRef.current.value = ''
-        console.log(newVal)
     }
     return <div className={props.className}>
-        <div className="col-12 mb-3">
+        <div className="col-12 my-5">
             <form onSubmit={handleSubmit} action="">
-                <textarea ref={textAreaRef} required={true} className='form-control' name="post" id="" cols="30" rows="10"/>
+                <textarea ref={textAreaRef} required={true} className='form-control mb-3' name="post" id="" rows='5'/>
                 <button type='submit' className='btn btn-primary'>Post</button>
             </form>
         </div>
+        <Posts newPosts={newPosts} />
     </div>
 }
 
 const Posts = (props) => {
-    const [posts, setPosts] = useState([{'content': '123'}])
+    const [postsInit, setPostsInit] = useState([])
+    const [posts, setPosts] = useState([])
+
+    useEffect(() => {
+        const final = [...props.newPosts].concat(postsInit)
+        if (final.length !== posts.length) {
+            setPosts(final)
+        }
+    }, [props.newPosts, posts, postsInit])
 
     useEffect(() => {
         const myCallback = (response, status) => {
             if (status === 200) {
-                setPosts(response)
+                setPostsInit(response)
             }
             else {
                 alert('alert')

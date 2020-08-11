@@ -5,7 +5,7 @@ import styles from './Header.module.css'
 const Header = (props) => {
     return(
         <div>
-            <nav className="navbar navbar-expand-lg navbar-light bg-light">
+            <nav className="navbar navbar-expand-lg navbar-light bg-light pb-0">
                 <div className={styles.logo}>
                     <img src={logo} className="App-logo" alt="logo" />
                     <p className="navbar-brand" >header</p>
