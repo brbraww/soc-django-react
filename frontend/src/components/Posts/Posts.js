@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from "react";
 import Post from "./Post/Post";
-import {loadPosts, createPost} from "../../api/posts_api";
+import {apiPostList, apiPostCreate} from "./posts_api_methods";
 
 
 export const PostsComponent = (props) => {
@@ -21,7 +21,7 @@ export const PostsComponent = (props) => {
     const handleSubmit = (event) => {
         event.preventDefault()
         const newVal = textAreaRef.current.value
-        createPost(newVal, handleBackendUpdate)
+        apiPostCreate(newVal, handleBackendUpdate)
         textAreaRef.current.value = ''
     }
     return <div className={props.className}>
@@ -49,7 +49,7 @@ const Posts = (props) => {
 
     useEffect(() => {
         if (postsDidSet === false) {
-            const myCallback = (response, status) => {
+            const handlePostListLookup = (response, status) => {
                 if (status === 200) {
                     setPostsInit(response)
                     setPostsDidSet(true)
@@ -57,7 +57,7 @@ const Posts = (props) => {
                     alert('alert')
                 }
             }
-            loadPosts(myCallback)
+            apiPostList(handlePostListLookup)
         }
     }, [postsInit, postsDidSet, setPostsDidSet])
 

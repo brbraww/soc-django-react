@@ -1,22 +1,22 @@
 import React, {useState} from "react";
+import {apiPostAction} from "../posts_api_methods";
 
 const ActionBtn = (props) => {
     const {post, action} = props
     const [likes, setLikes] = useState(post.likes ? post.likes : 0)
-    const [userLike, setUserLike] = useState(post.userLike ? true : false)
     const className = props.className ? props.className : 'btn btn-primary btn-sm'
     const actionDisplay = action.display ? action.display : 'Action'
+
+    const handleActionBackendEvent = (response, status) => {
+        console.log(response, status)
+        if (status === 200) {
+            setLikes(response.likes)
+        }
+    }
+
     const handleClick = (event) => {
         event.preventDefault()
-        if (action.type === 'like') {
-            if (userLike === true) {
-                setLikes(likes-1)
-                setUserLike(false)
-            } else {
-                setUserLike(true)
-                setLikes(post.likes+1)
-            }
-        }
+        apiPostAction(post.id, action.type, handleActionBackendEvent)
     }
     const display = action.type === 'like' ? `${likes} ${action.display}` : actionDisplay
     return <button onClick={handleClick} className={className}>{display}</button>

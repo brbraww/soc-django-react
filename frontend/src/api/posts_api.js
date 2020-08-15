@@ -14,7 +14,7 @@ function getCookie(name) {
     return cookieValue;
 }
 
-function loockup(method, endpoint, callback, data) {
+export function backendLoockup(method, endpoint, callback, data) {
     let jsonData
     if (data) {
         jsonData = JSON.stringify(data)
@@ -38,13 +38,4 @@ function loockup(method, endpoint, callback, data) {
         callback({'message': 'request was an error'}, 400)
     }
     xhr.send(jsonData)
-}
-
-
-export function loadPosts(callback) {
-    loockup('GET', '/posts', callback)
-}
-
-export function createPost(content, callback) {
-    loockup('POST', '/posts/create', callback, {content})
 }
