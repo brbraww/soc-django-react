@@ -6,7 +6,7 @@
           "nav content sidebar"
           "footer footer footer";
   grid-template-rows: 60px 1fr 60px;
-  grid-template-columns: 20% 1fr 15%;
+  grid-template-columns: 15% 1fr 15%;
   grid-gap: 0px;
   height: 100vh;
   margin: 0;

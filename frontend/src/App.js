@@ -11,7 +11,7 @@ const App = () => {
           <header id="pageHeader">
               <Header />
           </header>
-          <div id="mainContent" className='container'>
+          <div id="mainContent" className='container-fluid'>
               <PostsComponent />
           </div>
           <nav id="mainNav">Nav</nav>

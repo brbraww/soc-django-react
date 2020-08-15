@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from "react";
 import Post from "./Post/Post";
 import {apiPostList, apiPostCreate} from "./posts_api_methods";
-
+import styles from './Posts.module.css'
 
 export const PostsComponent = (props) => {
     const textAreaRef = React.createRef()
@@ -25,7 +25,7 @@ export const PostsComponent = (props) => {
         textAreaRef.current.value = ''
     }
     return <div className={props.className}>
-        <div className="col-12 my-5">
+        <div className={"col-12 my-5 " + styles.postCreate}>
             <form onSubmit={handleSubmit} action="">
                 <textarea ref={textAreaRef} required={true} className='form-control mb-3' name="post" id="" rows='5'/>
                 <button type='submit' className='btn btn-primary'>Post</button>
@@ -69,7 +69,7 @@ const Posts = (props) => {
                 {posts.map((item, index)=>{
                     return <Post
                         post={item}
-                        className='m-5 py-5 border bg-white text-dark post'
+                        className='my-5 mx-auto py-5 border bg-white text-dark'
                         key={`${index}-{item.id}`}
                     />
                 })}
