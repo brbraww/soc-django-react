@@ -1,22 +1,27 @@
 import React, {useEffect, useState} from "react";
 import Post from "./Post/Post";
-import {loadPosts} from "../../api/posts_api";
+import {loadPosts, createPost} from "../../api/posts_api";
 
 
 export const PostsComponent = (props) => {
     const textAreaRef = React.createRef()
     const [newPosts, setNewPosts] = useState([])
+
+    const handleBackendUpdate = (response, status) => {
+        let tempNewPosts = [...newPosts]
+        if (status === 201) {
+            tempNewPosts.unshift(response)
+            setNewPosts(tempNewPosts)
+        } else {
+            console.log(response)
+            alert('An error occured. Please try again')
+        }
+    }
+
     const handleSubmit = (event) => {
         event.preventDefault()
         const newVal = textAreaRef.current.value
-        let tempNewPosts = [...newPosts]
-
-        tempNewPosts.unshift({
-            content: newVal,
-            likes: 0,
-            id: 123123
-        })
-        setNewPosts(tempNewPosts)
+        createPost(newVal, handleBackendUpdate)
         textAreaRef.current.value = ''
     }
     return <div className={props.className}>
@@ -33,6 +38,7 @@ export const PostsComponent = (props) => {
 const Posts = (props) => {
     const [postsInit, setPostsInit] = useState([])
     const [posts, setPosts] = useState([])
+    const [postsDidSet, setPostsDidSet] = useState(false)
 
     useEffect(() => {
         const final = [...props.newPosts].concat(postsInit)
@@ -42,16 +48,18 @@ const Posts = (props) => {
     }, [props.newPosts, posts, postsInit])
 
     useEffect(() => {
-        const myCallback = (response, status) => {
-            if (status === 200) {
-                setPostsInit(response)
+        if (postsDidSet === false) {
+            const myCallback = (response, status) => {
+                if (status === 200) {
+                    setPostsInit(response)
+                    setPostsDidSet(true)
+                } else {
+                    alert('alert')
+                }
             }
-            else {
-                alert('alert')
-            }
+            loadPosts(myCallback)
         }
-        loadPosts(myCallback)
-    }, [])
+    }, [postsInit, postsDidSet, setPostsDidSet])
 
 
     return (
