@@ -37,7 +37,6 @@ class PostCreateSerializer(serializers.ModelSerializer):
 
 class PostSerializer(serializers.ModelSerializer):
     likes = serializers.SerializerMethodField(read_only=True)
-    #content = serializers.SerializerMethodField(read_only=True)
     parent = PostCreateSerializer(read_only=True)
 
     class Meta:
@@ -46,9 +45,3 @@ class PostSerializer(serializers.ModelSerializer):
 
     def get_likes(self, obj):
         return obj.likes.count()
-
-    #def get_content(self, obj):
-    #    сontent = obj.content
-    #    if obj.is_repost:
-    #        сontent = obj.parent.content
-    #    return сontent

@@ -3,14 +3,15 @@ import {apiPostAction} from "../posts_api_methods";
 import styles from './Post.module.css'
 
 const ActionBtn = (props) => {
-    const {post, action} = props
-    const [likes, setLikes] = useState(post.likes ? post.likes : 0)
+    const {post, action, didPerformAction} = props
+    const likes = post.likes ? post.likes : 0
     const className = props.className ? props.className : 'btn btn-primary btn-sm'
     const actionDisplay = action.display ? action.display : 'Action'
 
     const handlerActionBackendEvent = (response, status) => {
-        if (status === 200) {
-            setLikes(response.likes)
+        console.log(response, status)
+        if ((status === 200 || status === 201) && didPerformAction) {
+            didPerformAction(response, status)
         }
     }
 
@@ -37,19 +38,32 @@ export function ParentPost(props) {
 }
 
 const Post = (props) => {
-    const {post} = props
+    const {post, didRepost} = props
+    const [actionPost, setActionPost] = useState(props.post ? props.post : null)
     const className = props.className ? props.className : 'col-10 mx-auto col-md-6'
+
+    const handlePerformAction = (newPostAction, status) => {
+        if (status === 200) {
+            setActionPost(newPostAction)
+        } else if (status === 201) {
+            if (didRepost) {
+                didRepost(newPostAction)
+            }
+        }
+    }
+
     return (
         <div className= {className + ' ' + styles.post} id={post.id}>
             <div className='content'>
-                <p>{post.id} - {post.content}</p>
                 {post.parent && <div><ParentPost className={props.className+' '+styles.repost} post={post.parent} /></div>}
+                <p>{post.id} - {post.content}</p>
             </div>
-            <div className={'btn btn-group'}>
-                <ActionBtn post={post} action={{type:'like', display: 'Like'}}/>
-                <ActionBtn post={post} action={{type:'unlike', display: 'Unlike'}}/>
-                <ActionBtn post={post} action={{type:'repost', display: 'Share'}}/>
+            {actionPost && <div className={'btn btn-group'}>
+                <ActionBtn post={actionPost} didPerformAction={handlePerformAction} action={{type:'like', display: 'Like'}}/>
+                <ActionBtn post={actionPost} didPerformAction={handlePerformAction} action={{type:'unlike', display: 'Unlike'}}/>
+                <ActionBtn post={actionPost} didPerformAction={handlePerformAction} action={{type:'repost', display: 'Share'}}/>
             </div>
+            }
         </div>
     )
 }

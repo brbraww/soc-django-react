@@ -61,6 +61,14 @@ const Posts = (props) => {
         }
     }, [postsInit, postsDidSet, setPostsDidSet])
 
+    const handleDidRepost = (newPost) => {
+        const updatePostsInit = [...postsInit]
+        updatePostsInit.unshift(newPost)
+        setPostsInit(updatePostsInit)
+        const updateFinalPosts = [...posts]
+        updateFinalPosts.unshift(posts)
+        setPosts(updateFinalPosts)
+    }
 
     return (
         <div className='posts-list mt-5'>
@@ -69,6 +77,7 @@ const Posts = (props) => {
                 {posts.map((item, index)=>{
                     return <Post
                         post={item}
+                        didRepost={handleDidRepost}
                         className='my-5 mx-auto py-5 border bg-white text-dark'
                         key={`${index}-{item.id}`}
                     />
