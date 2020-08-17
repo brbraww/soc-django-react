@@ -6,6 +6,7 @@ import styles from './Posts.module.css'
 export const PostsComponent = (props) => {
     const textAreaRef = React.createRef()
     const [newPosts, setNewPosts] = useState([])
+    const canPost = props.canPost === 'false' ? false : true
 
     const handleBackendUpdate = (response, status) => {
         let tempNewPosts = [...newPosts]
@@ -24,14 +25,16 @@ export const PostsComponent = (props) => {
         apiPostCreate(newVal, handleBackendUpdate)
         textAreaRef.current.value = ''
     }
+
     return <div className={props.className}>
-        <div className={"col-12 my-5 " + styles.postCreate}>
+        {canPost === true && <div className={"col-12 my-5 " + styles.postCreate}>
             <form onSubmit={handleSubmit} action="">
                 <textarea ref={textAreaRef} required={true} className='form-control mb-3' name="post" id="" rows='5'/>
                 <button type='submit' className='btn btn-primary'>Post</button>
             </form>
         </div>
-        <Posts newPosts={newPosts} />
+        }
+        <Posts newPosts={newPosts} {...props} />
     </div>
 }
 
@@ -57,9 +60,9 @@ const Posts = (props) => {
                     alert('alert')
                 }
             }
-            apiPostList(handlePostListLookup)
+            apiPostList(props.username, handlePostListLookup)
         }
-    }, [postsInit, postsDidSet, setPostsDidSet])
+    }, [postsInit, postsDidSet, setPostsDidSet, props.username])
 
     const handleDidRepost = (newPost) => {
         const updatePostsInit = [...postsInit]

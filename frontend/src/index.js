@@ -5,15 +5,20 @@ import App from './App';
 import * as serviceWorker from './serviceWorker';
 import {PostsComponent} from "./components/Posts/Posts";
 
+
+const e = React.createElement
+
 //ReactDOM.render(<App />, document.getElementById('root'));
 
 const appEl = document.getElementById('root')
 if (appEl) {
-    ReactDOM.render(<App />, appEl)
+    const DatasetComponent = e(App, appEl.dataset)
+    ReactDOM.render(DatasetComponent, appEl)
 }
 const postsEl = document.getElementById('posts-element')
 if (postsEl) {
-    ReactDOM.render(<PostsComponent />, postsEl)
+    const DatasetComponent = e(PostsComponent, postsEl.dataset)
+    ReactDOM.render(DatasetComponent, postsEl)
 }
 
 // If you want your app to work offline and load faster, you can change

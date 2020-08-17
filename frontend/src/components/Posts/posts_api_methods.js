@@ -1,7 +1,11 @@
 import {backendLoockup} from '../../api/posts_api'
 
-export function apiPostList(callback) {
-    backendLoockup('GET', '/posts', callback)
+export function apiPostList(username, callback) {
+    let endpoint = '/posts'
+    if (username) {
+        endpoint = `/posts/?username=${username}`
+    }
+    backendLoockup('GET', endpoint, callback)
 }
 
 export function apiPostCreate(content, callback) {
@@ -14,6 +18,6 @@ export function apiPostAction(post_id, action, callback) {
     backendLoockup('POST', '/posts/action', callback, data)
 }
 
-export function apiPostGet(post_id, callback) {
+export function apiPostDetail(post_id, callback) {
     backendLoockup('GET', `/posts/${post_id}`, callback)
 }
