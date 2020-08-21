@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
-import {PostsComponent} from "./components/Posts/Posts";
+import PostsComponent from "./components/Posts/PostsComponent";
 
 
 const e = React.createElement

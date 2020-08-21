@@ -1,7 +1,7 @@
 import React from 'react';
 import './App.css';
-import {PostsComponent} from "./components/Posts/Posts";
 import Header from "./components/Header/Header";
+import PostsComponent from "./components/Posts/PostsComponent";
 
 
 
