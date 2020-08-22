@@ -19,12 +19,18 @@ from django.contrib import admin
 from django.urls import path, include
 from django.views.generic import TemplateView
 
-from soc.views import home_view
+from soc.views import (
+    local_posts_list_view,
+    local_posts_detail_view,
+    local_posts_profile_view
+)
 
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', home_view),
+    path('', local_posts_list_view),
+    path('<int:post_id>', local_posts_detail_view),
+    path('profile/<str:username>', local_posts_profile_view),
     path('react/', TemplateView.as_view(template_name='react/react_via_dj.html')),
     path('api/posts/', include('soc.urls')),
 ]
