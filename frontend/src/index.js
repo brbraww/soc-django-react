@@ -4,6 +4,7 @@ import './index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
 import PostsComponent from "./components/Posts/PostsComponent";
+import {PostDetailComponent} from "./components/Posts/Post/Post";
 
 
 const e = React.createElement
@@ -20,6 +21,10 @@ if (postsEl) {
     const DatasetComponent = e(PostsComponent, postsEl.dataset)
     ReactDOM.render(DatasetComponent, postsEl)
 }
+const postDetailElements = document.querySelectorAll('.post-detail-element')
+postDetailElements.forEach(container=>{
+    ReactDOM.render(e(PostDetailComponent, container.dataset), container)
+})
 
 // If you want your app to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.
