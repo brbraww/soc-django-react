@@ -20,19 +20,19 @@ from django.urls import path, include
 from django.views.generic import TemplateView
 
 from soc.views import (
-    local_posts_list_view,
-    local_posts_detail_view,
-    local_posts_profile_view
+    posts_list_view,
+    posts_detail_view,
+    posts_profile_view
 )
 
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', local_posts_list_view),
-    path('<int:post_id>', local_posts_detail_view),
-    path('profile/<str:username>', local_posts_profile_view),
+    path('', posts_list_view),
+    path('<int:post_id>', posts_detail_view),
+    path('profile/<str:username>', posts_profile_view),
     path('react/', TemplateView.as_view(template_name='react/react_via_dj.html')),
-    path('api/posts/', include('soc.urls')),
+    path('api/posts/', include('soc.api.urls')),
 ]
 
 if settings.DEBUG:
