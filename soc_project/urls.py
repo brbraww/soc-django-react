@@ -24,11 +24,19 @@ from soc.views import (
     posts_detail_view,
     posts_profile_view
 )
+from accounts.views import (
+    login_view,
+    logout_view,
+    register_view
+)
 
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', posts_list_view),
+    path('login/', login_view),
+    path('logout/', logout_view),
+    path('register/', register_view),
     path('<int:post_id>', posts_detail_view),
     path('profile/<str:username>', posts_profile_view),
     path('react/', TemplateView.as_view(template_name='react/react_via_dj.html')),
