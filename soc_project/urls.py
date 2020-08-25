@@ -16,7 +16,7 @@ Including another URLconf
 from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
-from django.urls import path, include
+from django.urls import path, include, re_path
 from django.views.generic import TemplateView
 
 from soc.views import (
@@ -38,7 +38,8 @@ urlpatterns = [
     path('logout/', logout_view),
     path('register/', register_view),
     path('<int:post_id>', posts_detail_view),
-    path('profile/<str:username>', posts_profile_view),
+    #path('posts/<str:username>', posts_profile_view), # old version
+    re_path(r'profiles?/', include('profiles.urls')), # new version
     path('react/', TemplateView.as_view(template_name='react/react_via_dj.html')),
     path('api/posts/', include('soc.api.urls')),
 ]

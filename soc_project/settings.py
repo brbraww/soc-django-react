@@ -43,6 +43,7 @@ INSTALLED_APPS = [
 
     'soc',
     'accounts',
+    'profiles',
 ]
 
 MIDDLEWARE = [
