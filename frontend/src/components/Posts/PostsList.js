@@ -5,6 +5,7 @@ import Post from "./Post/Post";
 const PostsList = (props) => {
     const [postsInit, setPostsInit] = useState([])
     const [posts, setPosts] = useState([])
+    const [nextUrl, setNestUrl] = useState(null)
     const [postsDidSet, setPostsDidSet] = useState(false)
 
     useEffect(() => {
@@ -18,7 +19,8 @@ const PostsList = (props) => {
         if (postsDidSet === false) {
             const handlePostListLookup = (response, status) => {
                 if (status === 200) {
-                    setPostsInit(response)
+                    setNestUrl(response.next)
+                    setPostsInit(response.results)
                     setPostsDidSet(true)
                 } else {
                     alert('alert')
@@ -37,20 +39,35 @@ const PostsList = (props) => {
         setPosts(updateFinalPosts)
     }
 
+    const handleLoadNext = (event) => {
+        event.preventDefault()
+        if (nextUrl !== null) {
+            const handleLoadNextResponse = (response, status) => {
+                if (status === 200) {
+                    setNestUrl(response.next)
+                    const newPosts = [...posts].concat(response.results)
+                    setPostsInit(newPosts)
+                    setPosts(newPosts)
+                } else {
+                    alert('alert')
+                }
+            }
+            apiPostList(props.username, handleLoadNextResponse, nextUrl)
+        }
+    }
+
     return (
-        <div className='posts-list mt-5'>
-            <p>Posts:</p>
-            <div>
-                {posts.map((item, index)=>{
-                    return <Post
-                        post={item}
-                        didRepost={handleDidRepost}
-                        className='my-5 mx-auto py-5 border bg-white text-dark'
-                        key={`${index}-{item.id}`}
-                    />
-                })}
-            </div>
-        </div>
+        <React.Fragment>
+            {posts.map((item, index)=>{
+                return <Post
+                    post={item}
+                    didRepost={handleDidRepost}
+                    className='my-5 mx-auto py-5 border bg-white text-dark'
+                    key={`${index}-{item.id}`}
+                />
+            })}
+            {nextUrl !== null && <button onClick={handleLoadNext} className='btn btn-outline-primary'>next</button>}
+        </React.Fragment>
     )
 }
 

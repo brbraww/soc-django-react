@@ -1,9 +1,12 @@
 import {backendLoockup} from '../../api/posts_api'
 
-export function apiPostList(username, callback) {
+export function apiPostList(username, callback, nextUrl) {
     let endpoint = '/posts'
     if (username) {
         endpoint = `/posts/?username=${username}`
+    }
+    if (nextUrl) {
+        endpoint = nextUrl.replace('http://localhost:8000/api', '')
     }
     backendLoockup('GET', endpoint, callback)
 }
