@@ -40,21 +40,23 @@ class PostTestCase(TestCase):
 
     def test_action_like(self):
         client = self.get_client()
-        for i in range(10):
-            response = client.post('/api/posts/action', {'post_id': 1, 'action':'like'})
-            self.assertEqual(response.status_code, 200)
-            self.assertEqual(len(response.json()), self.currentCount+1)
-            self.assertEqual(response.json().get('likes'), 1)
+        response = client.post('/api/posts/action', {'post_id': 1, 'action':'like'})
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json().get('likes'), 1)
+        # checking related names
+        user=self.user
+        my_like_instances_count = user.postlike_set.count()
+        my_related_likes_count = user.post_user.count()
+        self.assertEqual(my_like_instances_count, 1)
+        self.assertEqual(my_like_instances_count, my_related_likes_count)
 
     def test_action_unlike(self):
         client = self.get_client()
-        for i in range(10):
-            response = client.post('/api/posts/action', {'post_id': 1, 'action': 'unlike'})
-            another_response = client.post('/api/posts/action', {'post_id': 2, 'action': 'unlike'})
-            self.assertEqual(response.status_code, 200)
-            self.assertEqual(response.json().get('likes'), 0)
-            self.assertEqual(len(response.json()), self.currentCount+1)
-            self.assertEqual(another_response.json().get('likes'), 0)
+        response = client.post('/api/posts/action', {'post_id': 1, 'action': 'unlike'})
+        another_response = client.post('/api/posts/action', {'post_id': 2, 'action': 'unlike'})
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json().get('likes'), 0)
+        self.assertEqual(another_response.json().get('likes'), 0)
 
     def test_action_repost(self):
         client = self.get_client()
