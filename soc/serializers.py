@@ -1,5 +1,7 @@
 from rest_framework import serializers
 from django.conf import settings
+
+from profiles.serializers import PublickProfileSerializer
 from .models import Post
 
 
@@ -20,11 +22,12 @@ class PostActionSerializer(serializers.Serializer):
 
 
 class PostCreateSerializer(serializers.ModelSerializer):
+    user = PublickProfileSerializer(source='user.profile', read_only=True)
     likes = serializers.SerializerMethodField(read_only=True)
 
     class Meta:
         model = Post
-        fields = ['id', 'content', 'likes']
+        fields = ['user', 'id', 'content', 'likes', 'timestamp']
 
     def get_likes(self, obj):
         return obj.likes.count()
@@ -36,12 +39,14 @@ class PostCreateSerializer(serializers.ModelSerializer):
 
 
 class PostSerializer(serializers.ModelSerializer):
+    user = PublickProfileSerializer(source='user.profile', read_only=True)
     likes = serializers.SerializerMethodField(read_only=True)
     parent = PostCreateSerializer(read_only=True)
 
     class Meta:
         model = Post
-        fields = ['id', 'content', 'likes', 'is_repost', 'parent']
+        fields = ['user', 'id', 'content', 'likes', 'is_repost', 'parent', 'timestamp']
 
     def get_likes(self, obj):
         return obj.likes.count()
+

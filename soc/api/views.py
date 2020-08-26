@@ -1,8 +1,9 @@
 from django.conf import settings
 
 from rest_framework.response import Response
-from rest_framework.decorators import api_view, permission_classes, authentication_classes
+from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.pagination import PageNumberPagination
 
 from ..models import Post
 from ..serializers import (
@@ -26,14 +27,21 @@ def post_create_view(request, *args, **kwargs):
     return Response({}, status=400)
 
 
+def get_paginated_queryset_response(qs, request):
+    paginator = PageNumberPagination()
+    paginator.page_size = 10
+    paginated_qs = paginator.paginate_queryset(qs, request)
+    serializer = PostSerializer(paginated_qs, many=True)
+    return paginator.get_paginated_response(serializer.data)
+
+
 @api_view(['GET'])
 def post_list_view(request, *args, **kwargs):
     qs = Post.objects.all()
     username = request.GET.get('username')
     if username != None:
         qs = qs.by_username(username)
-    serializer = PostSerializer(qs, many=True)
-    return Response(serializer.data, status=200)
+    return get_paginated_queryset_response(qs, request)
 
 
 @api_view(['GET'])
@@ -41,8 +49,7 @@ def post_list_view(request, *args, **kwargs):
 def post_feed_view(request, *args, **kwargs):
     user = request.user
     qs = Post.objects.feed(user)
-    serializer = PostSerializer(qs, many=True)
-    return Response(serializer.data, status=200)
+    return get_paginated_queryset_response(qs, request)
 
 
 @api_view(['GET'])
