@@ -37,6 +37,20 @@ def post_list_view(request, *args, **kwargs):
 
 
 @api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def post_feed_view(request, *args, **kwargs):
+    user = request.user
+    profiles = user.following.all()
+    followed_users_id = []
+    if profiles.exists():
+        followed_users_id = [x.user.id for x in profiles]
+    followed_users_id.append(user.id)
+    qs = Post.objects.filter(user__id__in=followed_users_id).order_by('-timestamp')
+    serializer = PostSerializer(qs, many=True)
+    return Response(serializer.data, status=200)
+
+
+@api_view(['GET'])
 def post_detail_view(request, post_id, *args, **kwargs):
     qs = Post.objects.filter(id=post_id)
     if not qs.exists():
