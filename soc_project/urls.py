@@ -42,6 +42,7 @@ urlpatterns = [
     re_path(r'profiles?/', include('profiles.urls')), # new version
     path('react/', TemplateView.as_view(template_name='react/react_via_dj.html')),
     path('api/posts/', include('soc.api.urls')),
+    re_path(r'api/profiles?/', include('profiles.api.urls')),
 ]
 
 if settings.DEBUG:

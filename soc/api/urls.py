@@ -9,6 +9,11 @@ from .views import (
 )
 
 
+'''
+ClIENT
+Base ENDPOINT /api/posts/
+'''
+
 urlpatterns = [
     path('', post_list_view),
     path('action', post_action_view),
