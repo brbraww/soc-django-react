@@ -2,6 +2,7 @@ import React, {useEffect, useState} from "react";
 import ActionBtn from "./Buttons/ActionBtn";
 import ParentPost from "./ParentPost";
 import {apiPostDetail} from "../posts_api_methods";
+import {UserDisplay, UserPicture} from "../../Profiles/UserComponents";
 
 
 export const PostDetailComponent = (props) => {
@@ -57,18 +58,10 @@ const Post = (props) => {
     return (
         <div className= {className + ' mt-5'} id={post.id}>
             <div className='d-flex'>
-                <div className='col-1 text-center'>
-                    <span className="mx-1 px-3 py-2 rounded-circle bg-dark text-white">
-                        { post.user.username[0] }
-                    </span>
-                    <p className='mt-2 text-muted small'>@{ post.user.username }</p>
-                </div>
-                <div className="col-11 px-5">
+                <UserPicture user={post.user} className={'col-2 text-center'} />
+                <div className="col-10 px-5">
                     <div className='content'>
-                        <p>
-                            { post.user.first_name }{' '}
-                            { post.user.last_name }
-                        </p>
+                        <UserDisplay user={post.user} includeFullName={true} />
                         <p>{post.content}</p>
                         {post.parent && <div className='border rounded'>
                             <p className='m-1 text-muted small'>Repost</p>
@@ -82,7 +75,7 @@ const Post = (props) => {
                             <ActionBtn post={actionPost} didPerformAction={handlePerformAction} action={{type:'repost', display: 'Share'}}/>
                         </React.Fragment>
                         }
-                        {isDetail === true ? null : <button className='btn btn-outline-primary btn-sm' onClick={handleLink}>View</button>}
+                        {isDetail === true ? null : <button className='btn btn-outline-primary btn-sm float-none' onClick={handleLink}>View</button>}
                     </div>
                 </div>
             </div>
