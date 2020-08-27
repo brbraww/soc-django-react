@@ -7,7 +7,6 @@ const PostsList = (props) => {
     const [posts, setPosts] = useState([])
     const [nextUrl, setNestUrl] = useState(null)
     const [postsDidSet, setPostsDidSet] = useState(false)
-
     useEffect(() => {
         const final = [...props.newPosts].concat(postsInit)
         if (final.length !== posts.length) {
@@ -62,7 +61,7 @@ const PostsList = (props) => {
                 return <Post
                     post={item}
                     didRepost={handleDidRepost}
-                    className='my-5 mx-auto py-5 border bg-white text-dark'
+                    className='my-5 py-5 border bg-white text-dark'
                     key={`${index}-{item.id}`}
                 />
             })}
