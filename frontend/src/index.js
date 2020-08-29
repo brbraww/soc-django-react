@@ -6,7 +6,7 @@ import * as serviceWorker from './serviceWorker';
 import PostsComponent from "./components/Posts/PostsComponent";
 import {PostDetailComponent} from "./components/Posts/Post/Post";
 import FeedComponent from "./components/Posts/FeedComponent";
-
+import {ProfileBagdeComponent} from "./components/Profiles/ProfileBadge";
 
 const e = React.createElement
 
@@ -22,6 +22,12 @@ if (postsEl) {
     const DatasetComponent = e(PostsComponent, postsEl.dataset)
     ReactDOM.render(DatasetComponent, postsEl)
 }
+
+const userProfileBagdeEl = document.querySelectorAll('.profile-badge-element')
+userProfileBagdeEl.forEach(container=>{
+    ReactDOM.render(e(ProfileBagdeComponent, container.dataset), container)
+})
+
 
 const feedEl = document.getElementById('feed-element')
 if (feedEl) {
