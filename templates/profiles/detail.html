@@ -1,8 +1,8 @@
 {% extends 'base.html' %}
 {% block content %}
-<div class="description my-5">
-    {% if profile.location %} <p>Location: {{ profile.location }}</p> {% endif %}
-    {% if profile.bio %} <p>Bio: {{ profile.bio }}</p> {% endif %}
+<div class="profile-badge-element my-5" data-username="{{ username }}"></div>
+<div>
+    <h1>Posts by @{{ username }}:</h1>
 </div>
 <div
         id="posts-element"

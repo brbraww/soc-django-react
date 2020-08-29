@@ -1,6 +1,8 @@
 import React, {useEffect, useState} from "react";
 import {apiProfileDetail, apiProfileFollowToggle} from "./profile_api_methods";
 import {UserPicture} from "./UserActions";
+import {DisplayCount} from "../../utils";
+
 
 const ProfileBagde = (props) => {
     const {user, didFollowToggle, profileLoading} = props
@@ -17,6 +19,10 @@ const ProfileBagde = (props) => {
     return user ? <div>
         <UserPicture user={user} hideLink />
         <p>{user.first_name} {user.last_name}</p>
+        <p><DisplayCount>{user.follower_count}</DisplayCount> {user.follower_count === 1 ? 'follower' : 'followers'}</p>
+        <p><DisplayCount>{user.following_count}</DisplayCount> following</p>
+        {user.bio ? <p>Bio: {user.bio}</p> : null}
+        {user.location ? <p>Location: {user.location}</p> : null}
         <button onClick={handleFollowToggle} className='btn btn-primary'>{currentVerb}</button>
     </div> : null
 }
