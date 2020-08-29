@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block head_title %}
+    Feed
+{% endblock head_title %}
+
+{% block content %}
+
+{% if request.user.is_authenticated %}
+    <div id="feed-element"></div>
+{% else %}
+    <div id="posts-element"></div>
+{% endif %}
+
+{% endblock content %}

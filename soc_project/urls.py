@@ -22,7 +22,8 @@ from django.views.generic import TemplateView
 from soc.views import (
     posts_list_view,
     posts_detail_view,
-    posts_profile_view
+    posts_profile_view,
+    feed_view
 )
 from accounts.views import (
     login_view,
@@ -33,7 +34,8 @@ from accounts.views import (
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', posts_list_view),
+    path('', feed_view),
+    path('global/', posts_list_view),
     path('login/', login_view),
     path('logout/', logout_view),
     path('register/', register_view),
