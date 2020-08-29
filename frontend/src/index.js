@@ -5,6 +5,7 @@ import App from './App';
 import * as serviceWorker from './serviceWorker';
 import PostsComponent from "./components/Posts/PostsComponent";
 import {PostDetailComponent} from "./components/Posts/Post/Post";
+import FeedComponent from "./components/Posts/FeedComponent";
 
 
 const e = React.createElement
@@ -21,6 +22,13 @@ if (postsEl) {
     const DatasetComponent = e(PostsComponent, postsEl.dataset)
     ReactDOM.render(DatasetComponent, postsEl)
 }
+
+const feedEl = document.getElementById('feed-element')
+if (feedEl) {
+    const DatasetComponent = e(FeedComponent, feedEl.dataset)
+    ReactDOM.render(DatasetComponent, feedEl)
+}
+
 const postDetailElements = document.querySelectorAll('.post-detail-element')
 postDetailElements.forEach(container=>{
     ReactDOM.render(e(PostDetailComponent, container.dataset), container)

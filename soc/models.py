@@ -21,7 +21,7 @@ class PostQuerySet(models.QuerySet):
         followed_users_id = []
         if profiles_exists:
             followed_users_id = user.following.values_list("user__id", flat=True)
-        followed_users_id.append(user.id)
+        #followed_users_id.append(user.id)
         return self.filter(
             Q(user__id__in=followed_users_id) |
             Q(user=user)

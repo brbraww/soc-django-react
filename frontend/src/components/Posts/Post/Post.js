@@ -2,7 +2,7 @@ import React, {useEffect, useState} from "react";
 import ActionBtn from "./Buttons/ActionBtn";
 import ParentPost from "./ParentPost";
 import {apiPostDetail} from "../posts_api_methods";
-import {UserDisplay, UserPicture} from "../../Profiles/UserComponents";
+import {UserDisplay, UserPicture} from "../../Profiles/UserActions";
 
 
 export const PostDetailComponent = (props) => {
